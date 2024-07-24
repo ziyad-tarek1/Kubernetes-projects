@@ -1,0 +1,14 @@
+# this is the services-def.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    port: 5000
+    targetPort: 5000
+    nodePort: 30000 # You can choose a port between 30000-32767
+  type: NodePort

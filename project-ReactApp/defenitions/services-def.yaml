@@ -1,0 +1,16 @@
+---
+# this is the services-def.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-service
+spec:
+  selector:
+    app: react-app
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+    nodePort: 30001
+  type: NodePort
+

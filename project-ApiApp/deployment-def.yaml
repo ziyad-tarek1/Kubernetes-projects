@@ -1,0 +1,25 @@
+---
+# this is deployment-def.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ziyadtarek99/flask-app:1.2
+        ports:
+        - containerPort: 5000
+        resources:
+          limits: 
+            memory: "200Mi"
+      

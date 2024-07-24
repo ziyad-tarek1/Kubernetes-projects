@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-api
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      containers:
+      - name: todo-api
+        image: ziyadtarek99/api:1.1
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: todo-storage
+          mountPath: /app/data
+      volumes:
+      - name: todo-storage
+        persistentVolumeClaim:
+          claimName: todo-pvc
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-ui
+  template:
+    metadata:
+      labels:
+        app: todo-ui
+    spec:
+      containers:
+      - name: todo-ui
+        image: ziyadtarek99/ui:1.0
+        ports:
+        - containerPort: 80

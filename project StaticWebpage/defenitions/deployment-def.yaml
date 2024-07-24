@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-page-deployment
+  labels:
+    app: web-page
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-page
+  template:
+    metadata:
+      labels:
+        app: web-page
+    spec:
+      containers:
+      - name: web-page
+        image: ziyadtarek99/static-web-http:1.0
+        ports:
+        - containerPort: 80

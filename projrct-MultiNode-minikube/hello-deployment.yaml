@@ -1,0 +1,55 @@
+# Define the API version and kind of object (in this case, a Deployment)
+apiVersion: apps/v1
+kind: Deployment
+
+# Metadata about the Deployment, including its name
+metadata:
+  name: hello
+
+# Specification for the Deployment
+spec:
+  # Number of replicas (i.e., copies) of the pod to run
+  replicas: 2
+
+  # Strategy for rolling updates (i.e., updating the Deployment without downtime)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # Maximum number of unavailable pods during the update (in this case, 100%)
+      maxUnavailable: 100%
+
+  # Selector to match pods that belong to this Deployment
+  selector:
+    matchLabels:
+      app: hello
+
+  # Template for the pods in this Deployment
+  template:
+    metadata:
+      # Labels for the pods
+      labels:
+        app: hello
+
+    # Specification for the pods
+    spec:
+      # Affinity rules for scheduling pods
+      affinity:
+        podAntiAffinity:
+          # Require that pods with the same label ("app: hello") are not scheduled on the same host
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions: [{ key: app, operator: In, values: [hello] }]
+            topologyKey: "kubernetes.io/hostname"
+
+      # Containers in the pod
+      containers:
+      - name: hello-from
+        # Image to use for the container
+        image: pbitty/hello-from:latest
+        # Ports exposed by the container
+        ports:
+          - name: http
+            containerPort: 80
+
+      # Time to wait before forcefully terminating a pod (in seconds)
+      terminationGracePeriodSeconds: 1
