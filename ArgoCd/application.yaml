@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-argo-application
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+  # chose the repo
+    repoURL: https://gitlab.com/nanuchi/argocd-app-config.git
+    # to select the last commit made in the repo
+    targetRevision: HEAD
+    # chose the path if i have diff. paths
+    path: dev
+    # the defule kubernates service bucause we will run it locally
+  destination: 
+    server: https://kubernetes.default.svc
+    # we can choose any name space even if it dose not exist
+    namespace: myapp
+# in default argocd wont create a new namespace but the below attirubute  will make him check and create it it's not exist
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+
+# in default argocd wont sync automatically  but the below attirubute to sync any changes and sync even deleting resources
+# it will sync every 3 min
+    automated:
+      selfHeal: true
+      prune: true
+
+      
